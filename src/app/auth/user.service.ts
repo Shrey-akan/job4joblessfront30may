@@ -825,8 +825,8 @@ export class UserService {
     });
   }
 
-  fetchcontact() {
-    return this.h1.get(this.fetchcontactdetails);
+  fetchcontact(page?:number) {
+    return this.h1.get(`${this.fetchcontactdetails}?page=${page}`);
   }
 
 

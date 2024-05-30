@@ -7,70 +7,62 @@ import { AdminserviceService } from '../adminauth/adminservice.service';
   templateUrl: './enquirydetails.component.html',
   styleUrls: ['./enquirydetails.component.css']
 })
-export class EnquirydetailsComponent implements OnInit{
-  
-  data:any;
+export class EnquirydetailsComponent implements OnInit {
+
+  data: any;
   dcontacts: any[] = [];
-  
- currentPage: number = 1;
+
+  currentPage: number = 1;
+  directCurrentPage: number = 1
   itemsPerPage: number = 3;
-constructor(private b1:UserService , private adminauth:AdminserviceService) { }
-  
-  ngOnInit(): void {
-    let responce = this.b1.fetchcontact();
-    responce.subscribe((data1: any)=>this.data=data1);    
-    this.fetchData();
+  totalItems: number = 0;
+  totalPage: number = 0;
+  directTotalItems: number = 0;
+  directTotalPage: number = 0;
+  constructor(private b1: UserService, private adminauth: AdminserviceService) { }
+
+  ngOnInit(): void {    
+    this.fetchEnquiryData(this.currentPage)
+    this.fetchData(this.directCurrentPage);
   }
 
-fetchData() {
-    this.adminauth.fetchContacts().subscribe(
-      (data) => {
-        this.dcontacts = data; // Assign the fetched data to the contacts array
-      },
-      (error) => {
-        console.error('Error fetching data:', error);
-      }
-    );
+  fetchEnquiryData(page: number) {
+    let response = this.b1.fetchcontact(page - 1);
+    response.subscribe((data1: any) => {
+      this.data = data1.contacts,
+        this.currentPage = data1.currentPage + 1,
+        this.totalItems = data1.totalItems;
+        this.totalPage = data1.totalPages;
+    });
   }
 
-  nextPage() {
-    if (this.currentPage < this.totalPages()) {
-      this.currentPage++;
+  fetchData(page:number) {
+    let response=this.adminauth.fetchContacts(page-1);
+    response.subscribe((data1: any) => {
+      this.dcontacts = data1.directContacts,
+        this.directCurrentPage = data1.currentPage + 1,
+        this.directTotalItems = data1.totalItems;
+        this.directTotalPage = data1.totalPages;
+    });
+  }
+
+  onPageChange(page: number): void {
+    if (page >= 1 && page <= this.totalPage) {
+      console.log("I am inside On Page change" + page)
+      this.currentPage = page;
+      this.fetchEnquiryData(page);
     }
   }
 
-  previousPage() {
-    if (this.currentPage > 1) {
-      this.currentPage--;
+  onPageChangeDirect(page: number): void {
+    if (page >= 1 && page <= this.totalPage) {
+      console.log("I am inside On Page change" + page)
+      this.directCurrentPage = page;
+      this.fetchData(page);
     }
   }
 
-  totalPages(): number {
-    return Math.ceil(this.dcontacts.length / this.itemsPerPage);
-  }
 
-  startIndex(): number {
-    return (this.currentPage - 1) * this.itemsPerPage;
-  }
-
-  endIndex(): number {
-    return Math.min(this.startIndex() + this.itemsPerPage - 1, this.dcontacts.length - 1);
-  }
-
-
-
-
- // fetchData() {
-    //this.adminauth.fetchContacts().subscribe(
-      //(data) => {
-       // this.dcontacts = data; // Assign the fetched data to the contacts array
-        //console.log("hello");
-      //},
-    //  (error) => {
-   //     console.error('Error fetching data:', error);
-     // }
-  //  );
-//  }
   openContactOption(contactNumber: string) {
     // Check if the phone number is valid (you can add more validation)
     if (/^\d+$/.test(contactNumber)) {

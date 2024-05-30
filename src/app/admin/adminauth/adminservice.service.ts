@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { backendUrl } from 'src/app/constant';
 import { Observable, catchError, map, throwError } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class AdminserviceService {
   // private apiUrl = 'https://job4jobless.com:9001/';
   private apiUrl = `${backendUrl}`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,public cookie: CookieService) {}
 
   // loginCheck(formData: any): Observable<any> {
   //   return this.http.post(`${this.apiUrl}adminLoginCheck`, formData);
@@ -61,12 +62,16 @@ export class AdminserviceService {
   }
 
   fetchAdminData(): Observable<any> {
-    return this.http.get(`${this.apiUrl}fetchadmin`);
+    return this.http.get(`${this.apiUrl}fetchadmin?adminId=${this.cookie.get("adminid")}`);
   }
 
 
- fetchContacts(): Observable<any[]> {
-  return this.http.get<any[]>(`${this.apiUrl}fetchcontactfront`);
+//  fetchContacts(): Observable<any[]> {
+//   return this.http.get<any[]>(`${this.apiUrl}fetchcontactfront`);
+// }
+
+fetchContacts(page?:number) {
+  return this.http.get(`${this.apiUrl}fetchcontactfront?page=${page}`);
 }
 
 addQuestion(questionData: any) {

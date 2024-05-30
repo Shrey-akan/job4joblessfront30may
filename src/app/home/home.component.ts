@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../auth/user.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { backendUrl } from '../constant';
 
 @Component({
   selector: 'app-home',
@@ -24,22 +25,9 @@ export class HomeComponent implements OnInit {
     this.fetchJobTitles();
   }
 
-  // fetchJobTitles() {
-  //   // this.http.get<any[]>('http://job4jobless.com:9001/fetchjobpost').subscribe(
-  //   this.http.get<any[]>('http://localhost:9001/fetchjobpost').subscribe(
-  //     {
-  //       next: (jobPosts: any) => {
-  //         this.jobPosts = jobPosts;
-  //         console.log('Fetched job posts:', this.jobPosts);
-  //       },
-  //       error: (error: any) => {
-  //         console.error('Error fetching job posts:', error);
-  //       }
-  //     }
-  //   );
-  // }
+
   fetchJobTitles() {
-    this.http.get<any>('https://job4jobless.com:9001/fetchjobpost').subscribe(
+    this.http.get<any>(`${backendUrl}fetchjobpost`).subscribe(
       {
         next: (response: any) => {
           this.jobPosts = response.jobPosts || [];
@@ -84,7 +72,7 @@ export class HomeComponent implements OnInit {
   navigateToJobPage(jobPost: any) {
     // console.log("Company name is: ", jobPost.companyforthisjob);
     // this.router.navigate(['/findjobpage'], { state: { jobPost: jobPost } });
-    const url = `https://job4jobless.com/findjobpage?title=${encodeURIComponent(jobPost.jobtitle)}`;
+    const url = `${backendUrl}findjobpage?title=${encodeURIComponent(jobPost.jobtitle)}`;
     // Open the URL in a new tab
     window.open(url, '_blank');
   }

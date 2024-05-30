@@ -46,7 +46,7 @@ export class QuestionComponent implements OnInit {
   submitForm(): void {
     if (this.questionForm.valid && this.questionCounter < 5) {
       const questionData = this.questionForm.value;
-      this.b1.addQuestion(questionData).subscribe(
+      this.b1.addQuestion(this.jobid,questionData).subscribe(
         (response: any) => {
           console.log('Question added successfully:', response);
           this.questionCounter++;

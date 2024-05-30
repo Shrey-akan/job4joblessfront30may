@@ -56,13 +56,14 @@ export class MyjobsComponent implements OnInit {
   expandedUser: any | null = null;
   constructor(public cookie: CookieService, private b1: UserService, private router: Router, private elRef: ElementRef, private renderer: Renderer2) { }
 
-  userID: String = "0";
+  userID: string = "0";
   ngOnInit(): void {
     this.userID = this.cookie.get('uid');
-    let response = this.b1.fetchuser();
+    let response = this.b1.fetchuser(this.userID,0);
     response.subscribe((data1: any) => {
       const uuid = this.userID;
-      this.userData1 = data1.find((user: any) => user.uid == uuid);
+      // this.userData1 = data1.find((user: any) => user.uid == uuid);
+      this.userData1 = data1.users;
       this.abc = this.userData1.userName;
       this.fetchJobapplieddetails(this.currentPage);
     });

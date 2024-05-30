@@ -29,8 +29,10 @@ export class AdminloginComponent implements OnInit {
   ngOnInit(): void {
     this.myForm = this.formBuilder.group({
       userType: ['', Validators.required],
-      adminMail: ['', [Validators.required, Validators.email, Validators.pattern(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/)]],
-      adminPass: ['', [Validators.required, Validators.minLength(6)]],
+      // adminMail: ['', [Validators.required, Validators.email, Validators.pattern(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/)]],
+      // adminPass: ['', [Validators.required, Validators.minLength(6)]],
+      adminMail: ['', [Validators.email, Validators.pattern(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/)]],
+      adminPass: ['', [Validators.minLength(6)]],
       // subadminmail: ['', [Validators.required, Validators.email]],
       // subadminpassword: ['', [Validators.required, Validators.minLength(6)]]
       subadminmail: [''],
@@ -88,6 +90,7 @@ export class AdminloginComponent implements OnInit {
           }
         });
       }else if (formData.userType === 'subadmin') {
+        console.log("I am inside the subadmin: ")
       const subAdminFormData = {
         subadminmail: formData.subadminmail,
         subadminpassword: formData.subadminpassword

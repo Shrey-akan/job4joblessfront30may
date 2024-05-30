@@ -113,7 +113,7 @@ export class ApplyjobComponent implements OnInit {
   
   fetchUserData(uid: string): void {
     console.log("Fetching user data for UID:", uid);
-    const url = `http://localhost:9001/fetchuserById/${uid}`;
+    const url = `${backendUrl}fetchuserById/${uid}`;
   
     this.http.get<any>(url).pipe(
       catchError((error: HttpErrorResponse) => {

@@ -55,7 +55,7 @@ export class UserprofileComponent implements OnInit {
   ngOnInit(): void {
     // Check if the userID is correctly retrieved from the cookie
     this.userID = this.cookie.get('uid');
-    // console.log(this.userID);
+    console.log("The user id is: "+this.userID);
     // console.log('User ID from cookie:', this.userID);
 
     // let response = this.b1.fetchuser();
@@ -66,8 +66,9 @@ export class UserprofileComponent implements OnInit {
       // this.userData1 = data1.find((user: any) => user.uid == uuid);
       this.userData1 = data1.users;
       console.log("The userData1 is: "+JSON.stringify(this.userData1))
-      this.abc = this.userData1[1].userName;
-      console.log
+      // this.abc = this.userData1[1].userName;
+      this.abc = this.userData1?.[0]?.userName;
+      console.log("THe value of abc is: "+this.abc)
     });
 
     this.passwordResetForm = this.formBuilder.group({

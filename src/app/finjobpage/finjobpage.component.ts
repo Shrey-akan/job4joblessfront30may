@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../auth/user.service';
 import { HttpClient } from '@angular/common/http';
-
+import { backendUrl } from 'src/app/constant';
 
 
 interface Job {
@@ -35,6 +35,7 @@ export class FinjobpageComponent implements OnInit {
 navigateToJobPage(_t12: any) {
 throw new Error('Method not implemented.');
 }
+private backend_URL = `${backendUrl}`;
   isLoading: boolean = true;
   jobPosts: any[] = [];
 
@@ -77,7 +78,7 @@ throw new Error('Method not implemented.');
   }
 
   fetchJobsByTitle(title: string) {
-    this.b1.get<any[]>('http://job4jobless.com:9001/fetchJobByTitle?title=' + title).subscribe(
+    this.b1.get<any[]>(`${backendUrl}fetchJobByTitle?title=` + title).subscribe(
 {
   next:      (filteredJobs:any) => {
     this.filteredJobs = filteredJobs;

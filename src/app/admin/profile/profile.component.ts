@@ -23,6 +23,7 @@ export class ProfileComponent implements OnInit {
   isOpen: boolean = false;
   active: number = 0;
   data: any;
+  adminId:any;
   constructor(public cookie: CookieService, private router: Router, private adminauth: AdminserviceService) { }
 
   ngOnInit(): void {
@@ -33,6 +34,8 @@ export class ProfileComponent implements OnInit {
    
   }
   fetchAdminData() {
+    this.adminId=this.cookie.get("adminid")
+    console.log("Admin is :"+this.adminId)
     let responce = this.adminauth.fetchAdminData();
     // Make an HTTP request to fetch admin data
     responce.subscribe((data1: any)=>this.data=data1);   
