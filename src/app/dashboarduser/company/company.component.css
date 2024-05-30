@@ -1,0 +1,11 @@
+.custom-btn {
+    color: black;
+    background-color: #1e2e5c41;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bolder;
+    border: 2px solid #1E2E5C;
+}
+.buttons{
+    color: white;
+    background-color: #1e2e5c;
+}
