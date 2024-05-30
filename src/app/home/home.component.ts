@@ -69,11 +69,7 @@ export class HomeComponent implements OnInit {
   toggleShowMore() {
     this.showMore = !this.showMore;
   }
-  navigateToJobPage(jobPost: any) {
-    // console.log("Company name is: ", jobPost.companyforthisjob);
-    // this.router.navigate(['/findjobpage'], { state: { jobPost: jobPost } });
-    const url = `${backendUrl}findjobpage?title=${encodeURIComponent(jobPost.jobtitle)}`;
-    // Open the URL in a new tab
-    window.open(url, '_blank');
+  navigateToJobPage(jobTitle: string) {
+    this.router.navigate(['/findjobpage'], { queryParams: { title: jobTitle } });
   }
 }

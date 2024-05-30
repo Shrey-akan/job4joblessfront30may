@@ -1,13 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '../auth/user.service';
-import { HttpClient } from '@angular/common/http';
-import { backendUrl } from 'src/app/constant';
-
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { UserService } from "../auth/user.service";
+import { HttpClient } from "@angular/common/http";
+import { backendUrl } from "src/app/constant";
 
 interface Job {
   jobid: string;
-  empEmail:string;
+  empEmail: string;
   jobtitle: string;
   companyforthisjob: string;
   numberofopening: number;
@@ -18,30 +17,23 @@ interface Job {
   payjob: number;
   payjobsup: number;
   empid: string;
-  sendTime:Date;
+  sendTime: Date;
   isDescriptionVisible: boolean;
-  approvejob:boolean;
-  experience:String;
+  approvejob: boolean;
+  experience: String;
 }
-
-
-
 @Component({
-  selector: 'app-finjobpage',
-  templateUrl: './finjobpage.component.html',
-  styleUrls: ['./finjobpage.component.css']
+  selector: "app-finjobpage",
+  templateUrl: "./finjobpage.component.html",
+  styleUrls: ["./finjobpage.component.css"],
 })
 export class FinjobpageComponent implements OnInit {
-navigateToJobPage(_t12: any) {
-throw new Error('Method not implemented.');
-}
-private backend_URL = `${backendUrl}`;
   isLoading: boolean = true;
   jobPosts: any[] = [];
 
   liked: boolean = false;
   data1: any;
-  searchQuery: string = '';
+  searchQuery: string = "";
   showFooter = true;
   showJobFeed = true;
   showJobSearches = false;
@@ -50,8 +42,8 @@ private backend_URL = `${backendUrl}`;
   itemsPerPage = 5;
   currentPage = 1;
   totalPages!: number;
-  searchJobTitle: string = '';
-  searchLocation: string = '';
+  searchJobTitle: string = "";
+  searchLocation: string = "";
   filteredJobs!: any[];
 
   performSearch() {
@@ -61,14 +53,17 @@ private backend_URL = `${backendUrl}`;
   onPageChange(page: number): void {
     this.currentPage = page;
   }
-  userID: String = '0';
+  userID: String = "0";
 
-
-  constructor(private route: ActivatedRoute, private router: Router, private b1: HttpClient) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private b1: HttpClient
+  ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      const title = params['title'];
+    this.route.queryParams.subscribe((params) => {
+      const title = params["title"];
       if (title) {
         this.fetchJobsByTitle(title);
       } else {
@@ -78,36 +73,35 @@ private backend_URL = `${backendUrl}`;
   }
 
   fetchJobsByTitle(title: string) {
-    this.b1.get<any[]>(`${backendUrl}fetchJobByTitle?title=` + title).subscribe(
-{
-  next:      (filteredJobs:any) => {
-    this.filteredJobs = filteredJobs;
-    console.log('Fetched jobs by title:', this.filteredJobs);
-    this.isLoading = false;
-  },
-  error:(error:any) => {
-    console.error('Error fetching jobs by title:', error);
-    this.isLoading = false;
+    this.b1
+      .get<any[]>("https://job4jobless.com:9001/fetchJobByTitle?title=" + title)
+      .subscribe({
+        next: (filteredJobs: any) => {
+          this.filteredJobs = filteredJobs;
+          console.log("Fetched jobs by title:", this.filteredJobs);
+          this.isLoading = false;
+        },
+        error: (error: any) => {
+          console.error("Error fetching jobs by title:", error);
+          this.isLoading = false;
+        },
+      });
   }
-}
-    );
-  }
-
-
-
-
-
 
   navigateToSignIn() {
-    this.router.navigate(['/login']);
+    this.router.navigate(["/login"]);
   }
   toggleDescriptionVisibility(job: Job): void {
     this.selectedJob = this.selectedJob === job ? null : job;
   }
   navigateToSignUp() {
-    this.router.navigate(['/register']);
+    this.router.navigate(["/register"]);
   }
   getJobsForCurrentPage(): Job[] {
+    if (!this.filteredJobs) {
+      return [];
+    }
+  
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     return this.filteredJobs.slice(startIndex, endIndex);
@@ -117,8 +111,16 @@ private backend_URL = `${backendUrl}`;
     // console.log(this.searchJobTitle, this.searchLocation);
     if (this.searchJobTitle || this.searchLocation) {
       this.filteredJobs = this.data1.filter((job: Job) => {
-        const titleMatch = !this.searchJobTitle || job.jobtitle.toLowerCase().includes(this.searchJobTitle.toLowerCase());
-        const locationMatch = !this.searchLocation || job.locationjob.toLowerCase().includes(this.searchLocation.toLowerCase());
+        const titleMatch =
+          !this.searchJobTitle ||
+          job.jobtitle
+            .toLowerCase()
+            .includes(this.searchJobTitle.toLowerCase());
+        const locationMatch =
+          !this.searchLocation ||
+          job.locationjob
+            .toLowerCase()
+            .includes(this.searchLocation.toLowerCase());
         return titleMatch && locationMatch;
       });
     } else {
@@ -135,14 +137,17 @@ private backend_URL = `${backendUrl}`;
 
     // Check if the date is valid
     if (isNaN(date.getTime())) {
-        // console.error('Invalid date format:', sendTime);
-        return null;
+      // console.error('Invalid date format:', sendTime);
+      return null;
     }
 
     // Extract only the date part
-    const extractedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const extractedDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    );
 
     return extractedDate;
-}
-
+  }
 }
