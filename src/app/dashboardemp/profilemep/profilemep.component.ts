@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { UserService } from 'src/app/auth/user.service';
 import { backendUrl } from 'src/app/constant';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface Employer {
   empid: Number;
@@ -41,7 +42,7 @@ export class ProfilemepComponent implements OnInit {
   passwordResetForm!: FormGroup;
   successMessage: string = '';
   errorMessage: string = '';
-  constructor(public cookie: CookieService, private fb: FormBuilder, private b1: UserService, private router: Router, private http: HttpClient) { }
+  constructor(private snackBar:MatSnackBar, public cookie: CookieService, private fb: FormBuilder, private b1: UserService, private router: Router, private http: HttpClient) { }
 
   empId: string = "0";
   private backend_URL = `${backendUrl}`;
@@ -103,7 +104,11 @@ export class ProfilemepComponent implements OnInit {
               // console.log(response);
               this.successMessage = 'Password updated successfully';
               this.errorMessage = '';
-              alert('Password updated successfully');
+              this.snackBar.open('Password updated successfully', 'Close', {
+                duration: 10000, // Duration in milliseconds
+                horizontalPosition: 'center',
+                verticalPosition: 'top'
+              });
               this.router.navigate(['/dashboardemp/profilemep'])
             },
             error: (err: any) => {
@@ -170,17 +175,33 @@ export class ProfilemepComponent implements OnInit {
       next: (response: any) => {
         // console.log(response);
         if (response && response.message) {
-          alert(response.message); // Display the response message
+          this.snackBar.open(response.message, 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
           this.router.navigate(['/']);
         } else {
-          alert("Unexpected response format");
+          this.snackBar.open('Unexpected response format', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         }
       },
       error: (err: any) => {
         if (err.status === 404) {
-          alert("Employer not found");
+          this.snackBar.open('Employer not found', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         } else {
-          alert("An error occurred: " + err.message);
+          this.snackBar.open('An error occurred: ' + err.message, 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         }
       }
     });

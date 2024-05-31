@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { backendUrl } from 'src/app/constant';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-updatejob',
@@ -16,6 +17,7 @@ export class UpdatejobComponent implements OnInit {
   countries: string[] = [];
 
   constructor(
+    private snackBar:MatSnackBar,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private http: HttpClient,
@@ -176,14 +178,20 @@ export class UpdatejobComponent implements OnInit {
       .subscribe(
        {
         next: (response:any) => {
-          // console.log('Job updated successfully', response);
-          alert("JOB UPDATED SUCCESSFULLY");
+          this.snackBar.open('JOB UPDATED SUCCESSFULLY', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
           this.router.navigate(['/dashboardemp/alljobs']);
           // Handle success (e.g., show a success message)
         },
         error:(error:any) => {
-          // console.error('Error updating job', error);
-          alert(error);
+          this.snackBar.open(error, 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
           // Handle error (e.g., show an error message)
         }
        }

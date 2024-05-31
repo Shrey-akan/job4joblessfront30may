@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../auth/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ import { UserService } from '../auth/user.service';
 export class LoginComponent implements OnInit {
   loginform!: FormGroup;
   public passwordVisible: boolean = false;
-  constructor(private fb: FormBuilder, private router:Router , private b1:UserService, private userservice:UserService) {
+  constructor(private fb: FormBuilder, private router:Router , private b1:UserService, private userservice:UserService,private snackBar:MatSnackBar) {
       }
 
       ngOnInit(): void {

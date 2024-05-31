@@ -1,6 +1,9 @@
 <div class="container mt-5">
-
-
+  <div *ngIf="isLoading" class="text-center mt-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
   <div class="row" *ngIf="filteredData && filteredData.length > 0">
     <h2 class="mt-4 text-center">Job Applications Notification</h2>
     <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let application of filteredData">
@@ -29,21 +32,7 @@
             <i class="fa-solid fa-circle-xmark fa-1x" style="color: #ac2402;"></i>
             <span style="color: #ac2402;"> Rejected</span>
           </div>
-          <!-- <div class="btn-group">
-            <input type="text" [(ngModel)]="application.selectedOption" class="form-control"
-              (click)="toggleDropdown(application)" />
-            <button type="button" class="btn custom-btn rounded-pill dropdown-toggle"
-              (click)="toggleDropdown(application)">
-              Update Status
-            </button>
-            <div class="dropdown-menu" [ngClass]="{'show': application.isOpen}">
-              <ul class="list-group">
-                <li class="list-group-item" *ngFor="let option of options" (click)="selectOption(application, option)">
-                  {{ option }}
-                </li>
-              </ul>
-            </div>
-          </div> -->
+         
           <div class="btn-group">
             <input type="text" [(ngModel)]="application.selectedOption" #statusInput class="form-control"
               (click)="toggleDropdown(application)" />

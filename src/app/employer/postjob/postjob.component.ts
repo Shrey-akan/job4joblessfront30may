@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/auth/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-postjob',
@@ -16,7 +17,7 @@ export class PostjobComponent implements OnInit {
   data: any;
 
 
-  constructor(private formBuilder: FormBuilder, private router: Router,private b1:UserService) { }
+  constructor(private snackBar:MatSnackBar, private formBuilder: FormBuilder, private router: Router,private b1:UserService) { }
 
 
 
@@ -58,8 +59,11 @@ export class PostjobComponent implements OnInit {
       // console.log(this.companyswitch);
       return this.b1.logincheckemp(this.companyswitch.getRawValue());
     } else {
-      // Form is not valid, display an alert
-      alert('Form is not valid. Please check the fields.');
+      this.snackBar.open('Form is not valid. Please check the fields.', 'Close', {
+        duration: 10000, // Duration in milliseconds
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
       return; // Return early to prevent further execution
     }
   }

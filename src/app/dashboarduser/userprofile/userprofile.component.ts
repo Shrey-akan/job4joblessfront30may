@@ -6,6 +6,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { UserService } from 'src/app/auth/user.service';
 import { backendUrl } from 'src/app/constant';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { MatSnackBar } from '@angular/material/snack-bar';
 interface User {
   uid: Number;
   userName: String;
@@ -46,7 +47,7 @@ export class UserprofileComponent implements OnInit {
   errorMessage = '';
   isLoading!: boolean;
   error!: string;
-  constructor(public cookie: CookieService, private sanitizer: DomSanitizer, private formBuilder: FormBuilder, private http: HttpClient, private router: Router, private b1: UserService) { }
+  constructor(private snackBar:MatSnackBar, public cookie: CookieService, private sanitizer: DomSanitizer, private formBuilder: FormBuilder, private http: HttpClient, private router: Router, private b1: UserService) { }
 
   userID: string = "0"; // Change 'String' to 'string'
 
@@ -119,7 +120,12 @@ export class UserprofileComponent implements OnInit {
               // console.log(response);
               this.successMessage = 'Password updated successfully';
               this.errorMessage = '';
-              alert('Password updated successfully');
+              this.snackBar.open('Password updated successfully', 'Close', {
+                duration: 10000, // Duration in milliseconds
+                horizontalPosition: 'center',
+                verticalPosition: 'top'
+              });
+              
               this.router.navigate(['/dashboarduser/userprofile']);
             },
 
@@ -179,18 +185,34 @@ export class UserprofileComponent implements OnInit {
         next: (response: any) => {
           // Check the response message to determine if the operation was successful
           if (response && response.message) {
-            alert(response.message); // Display the response message
+            this.snackBar.open(response.message, 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
             this.router.navigate(['/']); // Navigate to the home page or any other appropriate page
           } else {
-            alert("Unexpected response format"); // Handle unexpected response format
+            this.snackBar.open('Unexpected response format', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
           }
         },
         error: (err: any) => {
           // Handle different error scenarios
           if (err.status === 404) {
-            alert("User not found"); // Handle 404 error (user not found)
-          } else {
-            alert("An error occurred: " + err.message); // Display a generic error message for other errors
+            this.snackBar.open('User not found', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
+          } else { // Display a generic error message for other errors
+            this.snackBar.open('An error occurred', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
           }
         }
       }

@@ -14,22 +14,6 @@
       <li (click)="toggleTableVisibility()" class="list-inline-item status-option">Show in Table</li>
     </ul>
   </div>
-  <!-- <div class="form-group mt-3">
-    <label for="jobTitleFilter">Filter by Job Title:</label>
-    <input type="text" class="form-control" id="jobTitleFilter" [(ngModel)]="jobTitleFilter"
-      (input)="filterByJobTitle()" />
-  </div> -->
-  <!-- <div class="form-group mt-3">
-    <label for="jobTitleFilter">Filter by Job Title:</label>
-    <div class="input-group">
-      <input type="text" class="form-control" id="jobTitleFilter" [(ngModel)]="jobTitleFilter" />
-      <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button" (click)="filterByJobTitle()">
-          <i class="fa fa-search"></i> 
-        </button>
-      </div>
-    </div>
-  </div>   -->
   <div class="form-group mt-3">
     <label for="jobTitleFilter" class="font-weight-bold">Filter by Job Title:</label>
     <div class="input-group">
@@ -42,10 +26,12 @@
     </div>
   </div>
   
-  
-  
-  
   <h2 class="mt-4">Job Applications</h2>
+  <div *ngIf="isLoading" class="text-center mt-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
   <div class="row">
     <!-- <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let application of filteredData"> -->
     <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let application of filteredData">
@@ -55,10 +41,6 @@
           <h2>{{application.jucompny}}</h2>
           <p><strong>Name:</strong> {{ application.juname }}</p>
           <p><strong>Mail:</strong> <a [href]="'mailto:' + application.jumail">{{ application.jumail }}</a></p>
-          <!-- <p><strong>Email:</strong> {{ application.jumail }}</p> -->
-          <!-- <p><strong>Resume:</strong> <a [href]="'https://job4jobless.com:9001/getPdfByUi/' + application.uid" target="_blank">Open Resume</a></p> -->
-          <!-- <p><strong>Resume:</strong> <a [href]="backend_URL + 'getPdfByUid/' + application.uid" target="_blank">Open Resume</a></p> -->
-          <!-- <p><strong>Resume:</strong> <a [href]="backend_URL + 'getPdfByUi/' + application.uid" target="_blank">Open Resume</a></p> -->
           <p><strong>Resume:</strong> <a [href]="backend_URL + 'getPdfByUid/' + application.uid" target="_blank">Open
               Resume</a></p>
 
@@ -108,11 +90,6 @@
           <p><strong>Company Name:</strong> {{ application.jucompanyname }}</p>
           <div class="container">
             <div class="row">
-              <!-- <div class="col-lg-6 col-md-6 col-sm-12">
-                <button class="btn custom-btn rounded-pill btn-block mt-2" (click)="navigateToMessage(application.uid)">
-                  <i class="fa fa-envelope"></i> Message
-                </button>
-              </div> -->
               <div class="col-lg-6 col-md-6 col-sm-12">
                 <button class="btn custom-btn rounded-pill btn-block mt-2"
                   (click)="navigateToMessage(application.uid, application.juname)">
@@ -156,6 +133,11 @@
 </div>
 
 <h2 class="mt-4 text-center">Job Applications</h2>
+<!-- <div *ngIf="isLoading" class="text-center mt-5">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div> -->
 
 <div class="table-responsive">
   <!-- Table to Display Data -->

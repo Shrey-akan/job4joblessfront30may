@@ -5,6 +5,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { backendUrl } from 'src/app/constant';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 class SendMessage {
   messageTo!: string;
@@ -36,7 +37,7 @@ export class VideocallComponent implements OnInit {
   currentPeer: any = null;
   screenSharing = false;
   endCall: boolean = false;
-  constructor(private renderer: Renderer2 , private http: HttpClient, private route: ActivatedRoute,
+  constructor(private snackBar:MatSnackBar, private renderer: Renderer2 , private http: HttpClient, private route: ActivatedRoute,
     private cookie: CookieService,private formBuilder: FormBuilder , private router: Router) { }
 
     private backend_URL=`${backendUrl}`;
@@ -143,7 +144,11 @@ export class VideocallComponent implements OnInit {
     // console.log('Creating Room');
     const roomInput = this.roomInput.nativeElement.value.trim();
     if (!roomInput) {
-      alert('Please enter room number');
+      this.snackBar.open('Please enter room number', 'Close', {
+        duration: 10000, // Duration in milliseconds
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
       return;
     }
     this.room_id = this.PRE + roomInput + this.SUF;
@@ -203,7 +208,11 @@ export class VideocallComponent implements OnInit {
     // console.log('Joining Room');
     const room = this.roomInput.nativeElement.value.trim();
     if (!room) {
-      alert('Please enter room number');
+      this.snackBar.open('Please enter room number', 'Close', {
+        duration: 10000, // Duration in milliseconds
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
       return;
     }
     this.room_id = this.PRE + room + this.SUF;

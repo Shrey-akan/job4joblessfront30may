@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Import Validators
 import { backendUrl , OtpUrl} from '../constant';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-resetpass',
@@ -22,6 +23,7 @@ export class ResetpassComponent implements OnInit{
   userForm!: FormGroup; // Define a FormGroup for your form
 
   constructor(
+    private snackBar:MatSnackBar,
     private userService: UserService,
     private http: HttpClient,
     private router: Router,
@@ -52,7 +54,11 @@ export class ResetpassComponent implements OnInit{
         error: (err: any) => {
           console.error(err);
           this.user = undefined;
-          alert("Invalid mail or Does not exist");
+          this.snackBar.open('Invalid mail or Does not exist', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
           this.errorMessage = err.error;
           this.isLoading = false; // Turn off loader in case of error
         }
@@ -82,13 +88,21 @@ export class ResetpassComponent implements OnInit{
         } 
         else {
           console.error("Otp not generated");
-          alert("Otp not generated");
+          this.snackBar.open('Otp not generated', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
           this.isLoading = false; // Turn off loader in case OTP is not generated
         }
       },
       error: (err: any) => {
         console.error(`Some error occurred: ${err}`);
-        alert(err);
+        this.snackBar.open(err, 'Close', {
+          duration: 10000, // Duration in milliseconds
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
         this.isLoading = false; // Turn off loader in case of error
       }
     });

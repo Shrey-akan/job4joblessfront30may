@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../auth/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-contact',
@@ -12,7 +13,7 @@ export class ContactComponent {
   // Define a FormGroup for your form
   contactForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router, private h1: UserService) {
+  constructor(private snackBar:MatSnackBar, private fb: FormBuilder, private router: Router, private h1: UserService) {
     // Initialize the form with FormBuilder
     this.contactForm = this.fb.group({
       name: ['', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/), this.noLeadingSpaceValidator]],
@@ -60,16 +61,27 @@ export class ContactComponent {
         {
           next: (response: any) => {
             if (response === true) {
-              alert('Contact form submitted successfully');
+              this.snackBar.open('Contact form submitted successfully', 'Close', {
+                duration: 10000, // Duration in milliseconds
+                horizontalPosition: 'center',
+                verticalPosition: 'top'
+              });
               this.router.navigate(['/']);
             }
             else {
-              // Handle the case where the backend did not save the data successfully
-              alert('Failed to submit contact form');
+              this.snackBar.open('Failed to submit contact form', 'Close', {
+                duration: 10000, // Duration in milliseconds
+                horizontalPosition: 'center',
+                verticalPosition: 'top'
+              });
             }
           },
           error: (err) => {
-            alert(err);
+            this.snackBar.open(err, 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
           }
         }
       );

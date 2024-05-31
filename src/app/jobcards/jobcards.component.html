@@ -18,12 +18,12 @@
         (click)="performSearchAndFetchJobs()">Search Jobs</button>
     </div>
   </div>
-</div><div *ngIf="isLoading" class="text-center mt-5">
+</div>
+<div *ngIf="isLoading" class="text-center mt-5">
   <div class="spinner-border text-primary" role="status">
     <span class="visually-hidden">Loading...</span>
   </div>
 </div>
-
 <div *ngIf="!isLoading" class="container mt-3 mb-3">
   <div *ngFor="let job of jobs" class="job-item border-2 border rounded-4 p-4 mt-3">
   <!-- <div *ngFor="let job of filteredJobs" class="job-item border-2 border rounded-4 p-4 mt-3"> -->

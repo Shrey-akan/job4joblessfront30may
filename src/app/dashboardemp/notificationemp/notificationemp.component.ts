@@ -14,7 +14,7 @@ export class NotificationempComponent implements OnInit {
   backend_URL =`${backendUrl}`;
   notifications: any[] = [];
   empId: string = "0";
-  isLoading: boolean = false;
+  isLoading: boolean = true;
   statusOptions: string[] = ['All', 'Selected', 'Rejected', 'Reviewed', 'Waiting'];
   selectedStatus: string = 'Waiting';
   selectedOption: string = '';
@@ -43,18 +43,16 @@ export class NotificationempComponent implements OnInit {
   constructor(private notificationService: UserService, public cookie: CookieService,private router:Router) {}
 
   ngOnInit(): void {
-    this.empId = this.cookie.get('emp');
-    // let response = this.notificationService.fetchemployer();
-    let response = this.notificationService.fetchEmployerById(this.empId);
-    response.subscribe((data1: any) => {
-      // this.empDetail = data1.find((emp: any) => emp.empid == this.empId);
-      this.empDetail = data1;
-      this.abc = this.empDetail.empid;
-      console.log("Employee Details are: " + JSON.stringify(this.empDetail, null, 2));
-      console.log("Value of ABC is: "+this.abc)
-      this.fetchJobapplieddetails(this.currentPage);
-    });
-    this.fetchNotifications();
+      this.empId = this.cookie.get('emp');
+      let response = this.notificationService.fetchEmployerById(this.empId);
+      response.subscribe((data1: any) => {
+        this.empDetail = data1;
+        this.abc = this.empDetail.empid;
+        console.log("Employee Details are: " + JSON.stringify(this.empDetail, null, 2));
+        console.log("Value of ABC is: " + this.abc);
+        this.fetchJobapplieddetails(this.currentPage);
+      });
+      this.fetchNotifications();
   }
 
   fetchNotifications(): void {

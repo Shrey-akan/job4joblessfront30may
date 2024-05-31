@@ -129,8 +129,11 @@ export class SalaryComponent implements OnInit {
           console.log("Response is: " + response)
           const jsonResponse = JSON.parse(response); // Parse the JSON response
           if (jsonResponse.message === "User has already applied for this job") {
-            console.log("The user has already applied for this job.");
-            alert("You have already applied for this job....")
+            this.snackBar.open('You have already applied for this job....', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
           } else {
             console.log("The user has not applied for this job.");
             // Proceed with checking if the job ID exists

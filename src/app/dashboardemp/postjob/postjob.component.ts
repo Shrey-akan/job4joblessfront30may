@@ -230,9 +230,6 @@ export class PostjobComponent implements OnInit {
           if (resp !== null) {
             this.currentStep = 1;
             this.jobid = resp;
-            // console.log('checking the response for jobid', this.jobid);
-
-            // Move the navigation inside the subscription callback
             this.router.navigate(['/dashboardemp/set-question', this.jobid]);
 
             localStorage.removeItem('jobPostForm');

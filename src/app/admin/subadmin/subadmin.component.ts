@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { backendUrl } from 'src/app/constant';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-subadmin',
   templateUrl: './subadmin.component.html',
@@ -15,7 +16,7 @@ export class SubadminComponent implements OnInit{
   private backend_URL=`${backendUrl}`;
   public passwordVisible: boolean = false;
 
-  constructor(private formBuilder: FormBuilder , private http: HttpClient , private router:Router) { }
+  constructor(private snackBar:MatSnackBar, private formBuilder: FormBuilder , private http: HttpClient , private router:Router) { }
 
   ngOnInit(): void {
     this.adminForm = this.formBuilder.group({
@@ -43,7 +44,11 @@ export class SubadminComponent implements OnInit{
         (payload: any) => {
           console.log("Successfully added to database...");
           console.log("checking after running api", this.adminForm);
-          alert("Sub Admin Created Successfully....")
+          this.snackBar.open('Sub Admin Created Successfully....', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
           this.router.navigate(['/admin/subadmindetails']);
         },
         (err) => {

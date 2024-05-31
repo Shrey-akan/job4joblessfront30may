@@ -3,6 +3,7 @@ import { UserService } from 'src/app/auth/user.service';
 import { HttpClient } from '@angular/common/http';
 import { backendUrl } from 'src/app/constant';
 import { catchError, throwError } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-jobprovided',
@@ -27,7 +28,7 @@ export class JobprovidedComponent implements OnInit {
   isLoading: boolean = true;
 
 
-  constructor(private userService: UserService, private http: HttpClient) { }
+  constructor(private userService: UserService, private http: HttpClient , private snackBar:MatSnackBar) { }
 
   ngOnInit(): void {
     // this.loadJobData();
@@ -89,14 +90,22 @@ export class JobprovidedComponent implements OnInit {
       .subscribe({
         next: (response: any) => {
           console.log('Job deleted successfully:', response);
-          alert('Successfully Deleted the Job.');
+          this.snackBar.open('Successfully Deleted the Job.', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
           this.fetchJobPosts(this.currentPage);
           // Optionally, navigate to another page or reload current page
         },
         error: (error: any) => {
           console.error('Error deleting job:', error);
           // Handle error (e.g., show an error message)
-          alert('Error deleting job. Please try again later.');
+          this.snackBar.open('Error deleting job. Please try again later.', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         }
       });
   }

@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { ApplyJob } from 'src/app/apply-job';
@@ -15,6 +15,7 @@ import {
 import { AuthInterceptor } from '../interceptors/auth.interceptor';
 import { JobPostService } from './job-post.service';
 import { PostJob } from '../dashboardemp/alljobs/alljobs.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 // Define your API base URL as a constant variable
 // const API_BASE_URL = '${API_BASE_URL}';
@@ -64,7 +65,8 @@ interface Job {
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class UserService  {
+  // constructor(private snackBar: MatSnackBar){}
   http: any;
 
   fetchUserById(uid: string): Observable<User> {
@@ -170,7 +172,7 @@ export class UserService {
 
   //Blog Content
   loginWithGoogleHustle = `${hustleURL}/google-auth`;
-  constructor(private h1: HttpClient, private jobPostService: JobPostService, private router: Router, private auth: Auth, public cookie: CookieService) { }
+  constructor(private h1: HttpClient,private snackBar: MatSnackBar, private jobPostService: JobPostService, private router: Router, private auth: Auth, public cookie: CookieService) { }
 
 
 
@@ -274,15 +276,27 @@ export class UserService {
           const isAuthenticated = resp.accessToken && resp.uid;
 
           if (isAuthenticated) {
-            alert('Login Successful!');
+            this.snackBar.open('Login Successfully.', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
             console.log("Inside authentication")
             this.router.navigate(['/dashboarduser']);
           } else if (resp && resp.error) {
             console.log("message")
-            alert(resp.error);
+            this.snackBar.open(resp.error, 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
             this.router.navigate(['/login']);
           } else {
-            alert('An unexpected error occurred. Please try again later.');
+            this.snackBar.open('An unexpected error occurred. Please try again later.', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
             console.error('Unknown response format:', resp);
             this.router.navigate(['/login']);
           }
@@ -294,7 +308,11 @@ export class UserService {
       },
       error: (err: any) => {
         console.log(err);
-        alert('Incorrect Credentials!');
+        this.snackBar.open('Incorrect Credentials!', 'Close', {
+          duration: 10000, // Duration in milliseconds
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
         this.router.navigate(['/login']);
       }
     });
@@ -320,33 +338,30 @@ export class UserService {
         this.cookie.set('accessToken', resp.accessToken);
         this.cookie.set('uid', resp.uid);
         this.cookie.set('refreshToken', resp.refreshToken);
-        // console.log("Refresh token saved ", resp.refreshToken);
-        // console.log('Response from server:', resp);
-        // Inside your logincheckgmail function
-        const accessToken = resp.accessToken; // Assuming this is where you get the access token
+        const accessToken = resp.accessToken; 
         AuthInterceptor.accessToken = accessToken;
 
-        // Rest of your logincheckgmail function
-
-        // Check if both accessToken and uid are present to determine authentication
         const isAuthenticated = resp.accessToken && resp.uid;
-        // console.log("Checking the value of isAuthenticated", isAuthenticated);
         if (isAuthenticated) {
-          // console.log("Server responded with an object of the user");
-
-          // Redirect to the dashboard if the response is true
-          alert('Login Successful!');
+          this.snackBar.open('Login Successfully.', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
+          
           this.router.navigate(['/dashboarduser']);
         } else {
-          // Handle other response statuses or errors
-          // alert('Incorrect Credentials!');
           this.router.navigate(['/login']);
         }
         // console.log("Data checked");
       },
       error: (err: any) => {
         console.log(err);
-        alert('Incorrect Credentials!');
+        this.snackBar.open('Incorrect Credentials', 'Close', {
+          duration: 10000, // Duration in milliseconds
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
         this.router.navigate(['/login']);
       }
     });
@@ -373,17 +388,28 @@ export class UserService {
         const isAuthenticated = resp.accessToken;
         if (isAuthenticated) {
 
-          alert('Login Successful!');
+          this.snackBar.open('Login Successful!', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
           this.router.navigate([`/postblog/${accessToken}`]);
         } else {
-
-          alert('Incorrect Credentials!');
+          this.snackBar.open('Incorrect Credentials!', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
           this.router.navigate(['/blogs']);
         }
       },
       error: (err: any) => {
         // console.log(err);
-        alert('Incorrect Credentials!');
+        this.snackBar.open('Incorrect Credentials!', 'Close', {
+          duration: 10000, // Duration in milliseconds
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
         this.router.navigate(['/login']);
       }
     });
@@ -400,51 +426,6 @@ export class UserService {
       })
     );
   }
-  // public createOrGetUser(userName: any) {
-  //   const data = { userName }; // Wrap the username in an object
-
-  //   const headers = new HttpHeaders({
-  //     'Content-Type': 'application/json'
-  //   });
-
-  //   this.h1.post(this.insertgmail, userName, { headers }).subscribe({
-  //     next: (resp: any) => {
-
-  //       console.log("Access Token Generated" + resp.accessToken);
-  //       const mainres: User = resp;
-  //       console.log(`Login response from the server: ${mainres}`);
-
-  //       // Store the access token and uid in cookies
-  //       this.cookie.set('accessToken', resp.accessToken);
-  //       this.cookie.set('uid', resp.uid);
-  //       this.cookie.set('refreshToken', resp.refreshToken);
-  //       console.log("refresh token saved ", resp.refreshToken);
-  //       // Inside your logincheckgmail function
-  //       const accessToken = resp.accessToken; // Assuming this is where you get the access token
-  //       AuthInterceptor.accessToken = accessToken;
-  //       // Check if both accessToken and uid are present to determine authentication
-  //       const isAuthenticated = resp.accessToken && resp.uid;
-
-  //       if (isAuthenticated) {
-  //         console.log("Server responded with an object of the user");
-
-  //         // Redirect to the dashboard if the response is true
-  //         alert('Login Successful!');
-  //         this.router.navigate(['/dashboarduser']);
-  //       } else {
-  //         // Handle other response statuses or errors
-  //         alert('Incorrect Credentials!');
-  //         this.router.navigate(['/login']);
-  //       }
-  //       console.log("Data checked");
-  //     },
-  //     error: (err: any) => {
-  //       console.log(err);
-  //       alert('Incorrect Credentials!');
-  //       this.router.navigate(['/login']);
-  //     }
-  //   });
-  // }
 
   createOrGetUser(userName: any, userFirstName: any) {
     const requestBody = { userName, userFirstName };
@@ -488,14 +469,18 @@ export class UserService {
                 const isAuthenticated = accessToken && uid;
                 // User data is available, do something with it
                 if (isAuthenticated) {
-                  // console.log("Server responded with an object of the user");
-
-                  // Redirect to the dashboard if the response is true
-                  alert('Login Successful!');
+                  this.snackBar.open('Login Successful!', 'Close', {
+                    duration: 10000, // Duration in milliseconds
+                    horizontalPosition: 'center',
+                    verticalPosition: 'top'
+                  });
                   this.router.navigate(['/dashboarduser']);
                 } else {
-                  // Handle other response statuses or errors
-                  alert('Incorrect Credentials!');
+                  this.snackBar.open('Incorrect Credentials!', 'Close', {
+                    duration: 10000, // Duration in milliseconds
+                    horizontalPosition: 'center',
+                    verticalPosition: 'top'
+                  });
                   this.router.navigate(['/login']);
                 }
               } else {
@@ -577,10 +562,18 @@ export class UserService {
 
           if (isAuthenticated) {
             // console.log("Server responded with an object of employer");
-            alert('Login Successful!');
+            this.snackBar.open('Login Successfully.', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
             this.router.navigate(['/dashboardemp']);
           } else {
-            alert('Incorrect Credentials!');
+            this.snackBar.open('Incorrect Credentials.', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
             this.router.navigate(['/employer']);
           }
         } else {
@@ -589,8 +582,11 @@ export class UserService {
         }
       },
       error: (err: any) => {
-        // console.log(err);
-        alert('Incorrect Credentials!');
+        this.snackBar.open('Incorrect Credentials!', 'Close', {
+          duration: 10000, // Duration in milliseconds
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
         this.router.navigate(['/employer']);
       }
     });
@@ -627,10 +623,18 @@ export class UserService {
                 const isAuthenticated = accessToken && empid;
                 if (isAuthenticated) {
                   console.log("Server responded with an object of employer");
-                  alert('Login Successful!');
+                  this.snackBar.open('Login Successful!', 'Close', {
+                    duration: 10000, // Duration in milliseconds
+                    horizontalPosition: 'center',
+                    verticalPosition: 'top'
+                  });
                   this.router.navigate(['/dashboardemp']);
                 } else {
-                  alert('Incorrect Credentials!');
+                  this.snackBar.open('Incorrect Credentials!', 'Close', {
+                    duration: 10000, // Duration in milliseconds
+                    horizontalPosition: 'center',
+                    verticalPosition: 'top'
+                  });
                   this.router.navigate(['/employer']);
                 }
               } else {
@@ -673,20 +677,28 @@ export class UserService {
         const isAuthenticated = resp.accessToken && resp.empid;
 
         if (isAuthenticated) {
-          // console.log("Server responded with an object of employer");
-
-          // Redirect to the dashboard if the response is true
-          alert('Login Successful!');
+          this.snackBar.open('Login Successfully.', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
           this.router.navigate(['/dashboardemp']);
         } else {
           // Handle other response statuses or errors
-          alert('Email does not exist...Please register!!');
+          this.snackBar.open('Email does not exist...Please register!!.', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
           this.router.navigate(['/employer']);
         }
       },
       error: (err: any) => {
-        // console.log(err);
-        alert('Email does not exist...Please register!!');
+        this.snackBar.open('Email does not exist...Please register!!', 'Close', {
+          duration: 10000, // Duration in milliseconds
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
         this.router.navigate(['/employer']);
       }
     });
@@ -876,7 +888,11 @@ export class UserService {
         // console.log("Data inserted");
       },
       error: (err: any) => {
-        alert("You have already apply for this from this account once...");
+        this.snackBar.open('You have already apply for this from this account once...', 'Close', {
+          duration: 10000, // Duration in milliseconds
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
         // console.log(err);
       }
     });
@@ -927,31 +943,6 @@ export class UserService {
     return signOut(this.auth);
   }
 
-
-
-
-  //   public checkallanswer(userAnswers: any[]) {
-
-  //     const url = this.checkalanswere;
-
-  //     return this.h1.post(url, userAnswers).subscribe({
-  //       next: (resp: any) => {
-
-  //         if (resp) {
-  //           this.router.navigate(['/dashboarduser/applyjob']);
-  //         }
-  //         else{
-  //           this.router.navigate(['/dashboarduser']);
-  //         }
-
-  //       },
-  //       error: (err: any) => {
-
-  //         this.router.navigate(['/dashboarduser/'])
-  //       }
-  //     });
-  //   }
-
   public checkallanswer(userAnswers: any[]) {
     const url = this.checkalanswere;
 
@@ -960,33 +951,34 @@ export class UserService {
         if (resp) {
           // If response is true
           this.router.navigate(['/dashboarduser/applyjob']);
-          // Show alert with success message
-          alert('Answers checked successfully. You passed!');
+          this.snackBar.open('Answers checked successfully. You passed!', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         } else {
           // If response is false
           this.router.navigate(['/dashboarduser']);
-          // Show alert with failure message
-          alert('Answers checked. Unfortunately, you did not pass. Try again.');
+          this.snackBar.open('Answers checked. Unfortunately, you did not pass. Try again.', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         }
       },
       error: (err: any) => {
         // Handle error and navigate to the appropriate route
         console.error(err);
         this.router.navigate(['/dashboarduser/']);
-        // Show alert with error message
-        alert('Error checking answers. Please try again.');
+        this.snackBar.open('Error checking answers. Please try again.', 'Close', {
+          duration: 10000, // Duration in milliseconds
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
       }
     });
   }
 
-  // updateJobStatus(jobId: string, data: any): Observable<any> {
-  //   const url = `${API_BASE_URL}updateJobStatus/${jobId}`;
-  //   return this.h1.put(url, data);
-  // }
-  // updateSavedJobStatus(jobid: string, uid: string): Observable<any> {
-  //   const url = `${API_BASE_URL}update-status?jobid=${jobid}&uid=${uid}&status=${status}`;
-  //   return this.h1.put(url, {});
-  // }
   updateSavedJobStatus(jobid: string, uid: string): Observable<any> {
     const url = `${API_BASE_URL}update-status?jobid=${jobid}&uid=${uid}&status=${status}`;
     return this.h1.put(url, {});

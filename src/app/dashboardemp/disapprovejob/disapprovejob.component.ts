@@ -34,7 +34,7 @@ showDetails: any;
 })
 export class DisapprovejobComponent implements OnInit {
   // data: any;
-  isLoading = true;
+  isLoading:boolean = true;
   data:PostJob[]=[];
   empDetail: any;
   abc: any;
@@ -71,29 +71,6 @@ export class DisapprovejobComponent implements OnInit {
     });
   }
 
-
-
-  // fetchJobPostDetails() {
-  //   this.b1.fetchjobpost(this.empId).subscribe((data1: any) => {
-  //     this.data = data1.filter((job: any) => job.empid == this.abc);
-  //     console.log("checking the data",this.data);
-  //     this.filteredData = this.data.map((job: any) => ({ ...job, showDetails: false }));
-  //     console.log(this.filteredData.values);
-  //   });
-  // }
-  // fetchJobPostDetails() {
-  //   console.log("Employee ID is: "+this.empId)
-  //   this.b1.fetchDisapprovejobpostadmin(this.empId).subscribe((data1: any) => {
-  //     this.data = data1.filter((job: any) => job.empid == this.abc);
-  //     this.filteredData = this.data
-  //       .map((job: any) => ({ ...job, showDetails: false }))
-  //       .sort((a: PostJob, b: PostJob) => {
-  //         const dateA = new Date(a.sendTime || 0);
-  //         const dateB = new Date(b.sendTime || 0);
-  //         return dateB.getTime() - dateA.getTime();
-  //       });
-  //   });
-  // }
   fetchJobPostDetails(pageNumber:number) {
     this.isLoading = true;
     const url = `${backendUrl}fetchdisapprovejobpost`;
@@ -121,6 +98,7 @@ export class DisapprovejobComponent implements OnInit {
       }
     });
   }
+  
   filterByJobTitle() {
     if (!this.jobTitleFilter) {
       this.filteredData = this.data;

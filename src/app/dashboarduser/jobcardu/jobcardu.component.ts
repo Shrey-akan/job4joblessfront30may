@@ -4,6 +4,7 @@ import { UserService } from 'src/app/auth/user.service';
 import { CookieService } from 'ngx-cookie-service';
 import { HttpClient } from '@angular/common/http';
 import { backendUrl } from 'src/app/constant';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface Job {
   jobid: string;
@@ -51,7 +52,7 @@ export class JobcarduComponent implements OnInit {
   filteredJobs: Job[] = [];
   itemsPerPage = 5;
 
-  constructor(private router: Router, private b1: UserService, private cookie: CookieService, private http: HttpClient) { }
+  constructor(private router: Router, private b1: UserService, private cookie: CookieService,private snackBar: MatSnackBar, private http: HttpClient) { }
 
   ngOnInit(): void {
     this.uid = this.cookie.get('uid');
@@ -136,19 +137,6 @@ export class JobcarduComponent implements OnInit {
       this.b1.setEmpId(selectedJob.empid);
       this.b1.setJobId(selectedJob.jobid);
 
-      // this.b1.checkJobIdExists(selectedJob.jobid).subscribe({
-      //   next: (exists: boolean) => {
-      //     if (exists) {
-      //       this.router.navigate(['/dashboarduser/questionpaper', selectedJob.jobid]);
-      //     } else {
-      //       this.router.navigate(['/dashboarduser/applyjob']);
-      //     }
-      //   },
-      //   error: (error) => {
-      //     console.error('Error checking jobid:', error);
-      //     this.router.navigate(['/dashboarduser/applyjob']);
-      //   }
-      // });
       console.log("User ID is: " + this.uid);
       console.log("Job iD is: " + selectedJob.jobid)
       this.b1.checkAlreadyApplied(selectedJob.jobid, this.uid).subscribe({
@@ -157,7 +145,11 @@ export class JobcarduComponent implements OnInit {
           const jsonResponse = JSON.parse(response); // Parse the JSON response
           if (jsonResponse.message === "User has already applied for this job") {
             console.log("The user has already applied for this job.");
-            alert("You have already applied for this job....")
+            this.snackBar.open('You have already applied on this job.', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
           } else {
             console.log("The user has not applied for this job.");
             // Proceed with checking if the job ID exists

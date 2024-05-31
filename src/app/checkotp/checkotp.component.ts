@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../auth/user.service';
 import { backendUrl , OtpUrl } from '../constant';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-checkotp',
@@ -19,6 +20,7 @@ export class CheckotpComponent implements OnInit {
   loadingVerifyOTP: boolean = false;
 
   constructor(
+    private snackBar:MatSnackBar,
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
@@ -51,12 +53,20 @@ export class CheckotpComponent implements OnInit {
             this.updateUserificationStatus(emailValue);
           } else {
             this.otpExpired = true;
-            alert('OTP expired. Resend OTP.'); // Show alert using standard alert
+            this.snackBar.open('OTP expired. Resend OTP.', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
             this.resendOTP();
           }
         } else {
           this.loadingVerifyOTP = false;
-          this.showAlert('OTP not matched. Please enter the correct OTP.');
+          this.snackBar.open('OTP not matched. Please enter the correct OTP.', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         }
       },
       error: (err) => {
@@ -75,12 +85,20 @@ export class CheckotpComponent implements OnInit {
       next: (response: any) => {
         console.log("User verified successfully");
         this.router.navigate(['/login']);
-        alert('Register successful!');
+        this.snackBar.open('Register successful!', 'Close', {
+          duration: 10000, // Duration in milliseconds
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
       },
       error: (err) => {
         this.loadingVerifyOTP = false;
         console.error(`Error updating user verification status: ${err}`);
-        alert("Invalid mail");
+        this.snackBar.open('Invalid mail', 'Close', {
+          duration: 10000, // Duration in milliseconds
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
       }
     });
   }
@@ -99,12 +117,20 @@ export class CheckotpComponent implements OnInit {
           } else {
             this.otpExpired = true;
             
-            alert('OTP expired. Resend OTP.'); // Show alert using standard alert
+            this.snackBar.open('OTP expired. Resend OTP.', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
             this.loadingVerifyOTP=false
           }
         } else {
           this.loadingVerifyOTP=false
-          this.showAlert('OTP not matched. Please enter the correct OTP.');
+          this.snackBar.open('OTP not matched. Please enter the correct OTP.', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         }
       },
       error: (err) => {
@@ -113,8 +139,11 @@ export class CheckotpComponent implements OnInit {
     });
   }
 
-  // Function to show alerts using standard alert
   showAlert(message: string): void {
-    alert(message);
+    this.snackBar.open(message, 'Close', {
+      duration: 10000, // Duration in milliseconds
+      horizontalPosition: 'center',
+      verticalPosition: 'top'
+    });
   }
 }

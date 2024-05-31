@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AdminserviceService } from '../adminauth/adminservice.service';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthInterceptor } from 'src/app/interceptors/auth.interceptor';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface Admin {
 
@@ -23,7 +24,7 @@ export class LoginadminComponent implements OnInit {
   myForm!: FormGroup;
   public passwordVisible: boolean = false;
   showFooter = false;
-  constructor(private formBuilder: FormBuilder,private cookie: CookieService, private router: Router,private adminauth:AdminserviceService) { }
+  constructor(private snackBar:MatSnackBar, private formBuilder: FormBuilder,private cookie: CookieService, private router: Router,private adminauth:AdminserviceService) { }
 
   ngOnInit(): void {
     this.myForm = this.formBuilder.group({
@@ -32,29 +33,6 @@ export class LoginadminComponent implements OnInit {
 
     });
   }
-
-  // onSubmit() {
-  //   console.log(this.myForm.value);
-  //   if (this.myForm.valid) {
-  //     const formData = this.myForm.value;
-  //     this.adminauth.loginCheck(formData).subscribe(
-  //   {
-  //     next : (Response:any) => {
-  //       if(Response === true){
-  //         alert("Login SuccessFull");
-  //         this.router.navigate(['/admin/dashboardadmin']);
-  //       }
-  //       else{
-  //         this.router.navigate(['/admin']);
-  //       }
-  //     },
-  //     error: (err: any) => {
-  //       alert(err);
-  //     }
-  //   }
-  //     );
-  //   }
-  // }
 
   onSubmit() {
     console.log(this.myForm.value);
@@ -75,21 +53,36 @@ export class LoginadminComponent implements OnInit {
             const isAuthenticated = response.accessToken && response.adminid;
             console.log(isAuthenticated);
             if (isAuthenticated) {
-              alert('Login Successful!');
+              this.snackBar.open('Login Successful!.', 'Close', {
+                duration: 10000, // Duration in milliseconds
+                horizontalPosition: 'center',
+                verticalPosition: 'top'
+              });
               this.router.navigate(['/admin/dashboardadmin']);
             } else {
              
-              alert('Incorrect Credentials!');
+              this.snackBar.open('Incorrect Credentials!', 'Close', {
+                duration: 10000, // Duration in milliseconds
+                horizontalPosition: 'center',
+                verticalPosition: 'top'
+              });
               this.router.navigate(['/admin']);
             }
           } else {
          
-            alert("Invalid response format");
+            this.snackBar.open('Invalid response format', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
           }
         },
         error: (err: any) => {
-       
-          alert(err);
+          this.snackBar.open(err, 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         
         }
       });

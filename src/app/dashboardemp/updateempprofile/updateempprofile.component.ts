@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { HttpClient } from '@angular/common/http';
 import { backendUrl } from 'src/app/constant';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import * as intelInput from "intl-tel-input";
 @Component({
   selector: 'app-updateempprofile',
@@ -21,6 +22,7 @@ export class UpdateempprofileComponent implements OnInit {
   empid!: string | null;
   private backend_URL=`${backendUrl}`;
   constructor(
+    private snackBar:MatSnackBar,
     private formBuilder: FormBuilder,
     private b1: UserService,
     private route: ActivatedRoute,
@@ -123,9 +125,11 @@ export class UpdateempprofileComponent implements OnInit {
         )
         .subscribe({
           next: (response) => {
-            // Handle the success response here
-            // console.log('Profile updated successfully:', response);
-            alert("Profile updated successfully");
+            this.snackBar.open('Profile updated successfully', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
             this.router.navigate(['/dashboardemp/profilemep']);
           },
           complete: () => {

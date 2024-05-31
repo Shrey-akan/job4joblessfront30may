@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/auth/user.service';
 import { backendUrl , OtpUrl } from 'src/app/constant';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-resetpass',
@@ -23,6 +24,7 @@ export class ResetpassComponent  implements OnInit{
   loading: boolean = false;
 
   constructor(
+    private snackBar: MatSnackBar,
     private userService: UserService,
     private http: HttpClient,
     private router: Router,
@@ -51,7 +53,11 @@ export class ResetpassComponent  implements OnInit{
           console.error(err);
           this.user = undefined;
           this.loading = false;
-          alert("User does not exist...");
+          this.snackBar.open('User does not exist...', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
           this.errorMessage = err.error;
         }
       });
@@ -67,12 +73,20 @@ export class ResetpassComponent  implements OnInit{
         }
         else {
           console.error("Otp not generated");
-          alert("Otp not generated");
+          this.snackBar.open('Otp not generated', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         }
       },
       error: (err: any) => {
         console.error(`Some error occurred: ${err}`);
-        alert(err);
+        this.snackBar.open(err, 'Close', {
+          duration: 10000, // Duration in milliseconds
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
       },
       complete: () => {
         this.loading = false; // Hide loader after OTP generation is completed

@@ -42,6 +42,8 @@ export class FinjobpageComponent implements OnInit {
   itemsPerPage = 5;
   currentPage = 1;
   totalPages!: number;
+  totalItems: number = 0;
+  totalPage: number = 0;
   searchJobTitle: string = "";
   searchLocation: string = "";
   filteredJobs!: any[];
@@ -50,10 +52,8 @@ export class FinjobpageComponent implements OnInit {
     this.filterJobs();
   }
 
-  onPageChange(page: number): void {
-    this.currentPage = page;
-  }
   userID: String = "0";
+  jobTitle:string | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -64,20 +64,40 @@ export class FinjobpageComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       const title = params["title"];
+      this.jobTitle=title;
       if (title) {
-        this.fetchJobsByTitle(title);
+        this.fetchJobsByTitle(this.currentPage ,title);
       } else {
         // Handle the case where no title is provided in query parameters
       }
     });
   }
 
-  fetchJobsByTitle(title: string) {
+  // fetchJobsByTitle(title: string) {
+  //   this.b1
+  //     .get<any[]>(`${backendUrl}fetchJobByTitle?title=` + title)
+  //     .subscribe({
+  //       next: (filteredJobs: any) => {
+  //         this.filteredJobs = filteredJobs;
+  //         console.log("Fetched jobs by title:", this.filteredJobs);
+  //         this.isLoading = false;
+  //       },
+  //       error: (error: any) => {
+  //         console.error("Error fetching jobs by title:", error);
+  //         this.isLoading = false;
+  //       },
+  //     });
+  // }
+  
+  fetchJobsByTitle(page:number , title?: string ) {
     this.b1
-      .get<any[]>("https://job4jobless.com:9001/fetchJobByTitle?title=" + title)
+      .get<any[]>(`${backendUrl}fetchJobByTitle?title=` + title+`&page=`+(page-1))
       .subscribe({
         next: (filteredJobs: any) => {
-          this.filteredJobs = filteredJobs;
+          this.filteredJobs = filteredJobs.jobPosts;
+          this.currentPage = filteredJobs.currentPage + 1,
+          this.totalItems = filteredJobs.totalItems;
+          this.totalPage = filteredJobs.totalPages;
           console.log("Fetched jobs by title:", this.filteredJobs);
           this.isLoading = false;
         },
@@ -86,6 +106,13 @@ export class FinjobpageComponent implements OnInit {
           this.isLoading = false;
         },
       });
+  }
+  onPageChange(page: number): void {
+    if (page >= 1 && page <= this.totalPage) {
+      console.log("I am inside On Page change" + page)
+      this.currentPage = page;
+      this.fetchJobsByTitle(page,this.jobTitle);
+    }
   }
 
   navigateToSignIn() {

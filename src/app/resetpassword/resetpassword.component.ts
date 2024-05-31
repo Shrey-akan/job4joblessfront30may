@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { backendUrl } from '../constant';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-resetpassword',
@@ -26,7 +27,7 @@ export class ResetpasswordComponent implements OnInit {
   private backend_URL=`${backendUrl}`;
 
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private http: HttpClient) {
+  constructor(private snackBar:MatSnackBar, private formBuilder: FormBuilder, private router: Router, private http: HttpClient) {
     this.passwordResetForm = this.formBuilder.group({
       userName: ['',[Validators.required , Validators.email , Validators.pattern(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/) ]],
       newPassword: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#/><])[A-Za-z\d@$!%*?&#/><]+$/)]],
@@ -83,7 +84,11 @@ export class ResetpasswordComponent implements OnInit {
                 console.log(response);
                 this.successMessage = 'Password updated successfully';
                 this.errorMessage = '';
-                alert('Password updated successfully');
+                this.snackBar.open('Password updated successfully', 'Close', {
+                  duration: 10000, // Duration in milliseconds
+                  horizontalPosition: 'center',
+                  verticalPosition: 'top'
+                });
                 this.router.navigate(['/login']);
               },
 

@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { backendUrl } from 'src/app/constant';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 interface ApiResponse {
   waitingApplicationsCount:number;
   jobidWaitingCountMap: Record<string, number>;
@@ -18,7 +20,7 @@ export class HeaderdashboardempComponent implements OnInit {
   empId: String = "0";
   jobWaitingCounts!: number;
   private backend_URL = `${backendUrl}`;
-  constructor(private router: Router, private http: HttpClient, private cookie: CookieService) { }
+  constructor(private router: Router, private http: HttpClient, private cookie: CookieService, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.empId = this.cookie.get('emp');
@@ -71,7 +73,11 @@ export class HeaderdashboardempComponent implements OnInit {
           this.cookie.delete('emp');
           localStorage.clear();
 
-          alert('Logout successful');
+          this.snackBar.open('Logout Successfully.', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
           this.router.navigate(['/employer']);
         } else {
           // Handle other responses or errors

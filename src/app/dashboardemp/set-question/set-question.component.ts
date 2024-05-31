@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/auth/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-set-question',
@@ -18,7 +19,8 @@ export class SetQuestionComponent implements OnInit {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private b1:UserService,
-    private router:Router
+    private router:Router,
+    private snackBar:MatSnackBar
     // private quizService: QuizService
   ) {}
 
@@ -63,6 +65,11 @@ export class SetQuestionComponent implements OnInit {
             // this.submitForm();
           } else {
             // console.log('All 5 questions added. Redirecting...');
+            this.snackBar.open('Login Successfully.', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
             this.router.navigate(['/dashboardemp/alljobs']);
           }
         },

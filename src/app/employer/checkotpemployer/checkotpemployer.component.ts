@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/auth/user.service';
 import { backendUrl , OtpUrl } from 'src/app/constant';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-checkotpemployer',
@@ -19,6 +20,7 @@ export class CheckotpemployerComponent implements OnInit {
   loading: boolean = false;
 
   constructor(
+    private snackBar : MatSnackBar,
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
@@ -49,12 +51,18 @@ export class CheckotpemployerComponent implements OnInit {
           if (!payload.otpExpired) {
             this.updateEmployerVerificationStatus(emailValue);
           } else {
-            // console.error("OTP expired");
-            alert("OTP expired. Please resend the OTP.");
+            this.snackBar.open('OTP expired. Please resend the OTP.', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
           }
         } else {
-          // console.error("Incorrect OTP");
-          alert("Incorrect OTP. Please enter the correct OTP.");
+          this.snackBar.open('Incorrect OTP. Please enter the correct OTP.', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         }
       },
       error: (err) => {
@@ -93,10 +101,18 @@ export class CheckotpemployerComponent implements OnInit {
             this.router.navigate(['login']);
           } else {
             this.otpExpired = true;
-            alert("OTP expired. Please resend the OTP.");
+            this.snackBar.open('OTP expired. Please resend the OTP.', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
           }
         } else {
-          alert("Incorrect OTP. Please enter the correct OTP.");
+          this.snackBar.open('Incorrect OTP. Please enter the correct OTP.', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         }
       },
       error: (err) => {

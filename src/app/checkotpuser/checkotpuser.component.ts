@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../auth/user.service';
-import { MatSnackBar } from '@angular/material/snack-bar'; // Import MatSnackBar for showing alerts
+import { MatSnackBar } from '@angular/material/snack-bar'; // Import MatSnackBar for showing 
 import { backendUrl , OtpUrl} from '../constant';
 
 @Component({

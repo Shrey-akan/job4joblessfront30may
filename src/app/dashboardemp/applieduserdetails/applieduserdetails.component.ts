@@ -30,6 +30,8 @@ export class ApplieduserdetailsComponent implements OnInit {
   totalPages!: number;
   totalItems!: number;
 
+  isLoading: boolean = true;
+
   backend_URL = `${backendUrl}`;
 
   // Function to toggle the table visibility
@@ -45,15 +47,16 @@ export class ApplieduserdetailsComponent implements OnInit {
   empId: string | undefined;
 
   ngOnInit(): void {
-    this.empId = this.cookie.get('emp');
+      this.empId = this.cookie.get('emp');
 
-    // let response = this.b1.fetchemployer();
-    let response = this.b1.fetchEmployerById(this.empId);
-    response.subscribe((data1: any) => {
-      this.empDetail = data1;
-      this.abc = this.empDetail.empId;
-      this.fetchJobapplieddetails(this.currentPage);
-    });
+      // let response = this.b1.fetchemployer();
+      let response = this.b1.fetchEmployerById(this.empId);
+      response.subscribe((data1: any) => {
+        this.empDetail = data1;
+        this.abc = this.empDetail.empId;
+        this.fetchJobapplieddetails(this.currentPage);
+
+      });
   }
 
   // Fetch and filter job applications
@@ -74,8 +77,9 @@ export class ApplieduserdetailsComponent implements OnInit {
   //     this.filteredData = this.data;
   //   });
   // }
-  fetchJobapplieddetails(pageNumber: number,juTitle?:string) {
-    let response: any = this.b1.fetchapplyform(this.empId, pageNumber - 1,juTitle);
+  fetchJobapplieddetails(pageNumber: number, juTitle?: string) {
+    this.isLoading = true;
+    let response: any = this.b1.fetchapplyform(this.empId, pageNumber - 1, juTitle);
     response.subscribe((data1: any) => {
       // Ensure you are accessing the correct property from the response
       const jobPosts = Array.isArray(data1.jobPosts) ? data1.jobPosts : [];
@@ -94,7 +98,7 @@ export class ApplieduserdetailsComponent implements OnInit {
             const dateB = new Date(b.sendTime || 0);
             return dateB.getTime() - dateA.getTime();
           });
-
+        this.isLoading = false
         // this.filteredData = this.data;
       } else {
         console.error('Invalid data format received:', data1);
@@ -117,7 +121,7 @@ export class ApplieduserdetailsComponent implements OnInit {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
       // this.loadJobs(page);
-      this.fetchJobapplieddetails(page,this.jobTitleFilter)
+      this.fetchJobapplieddetails(page, this.jobTitleFilter)
     }
   }
 
@@ -139,8 +143,8 @@ export class ApplieduserdetailsComponent implements OnInit {
     //     application.jutitle.toLowerCase().includes(this.jobTitleFilter.toLowerCase())
     //   );
     // }
-    this.currentPage=1;
-    this.fetchJobapplieddetails(this.currentPage,this.jobTitleFilter)
+    this.currentPage = 1;
+    this.fetchJobapplieddetails(this.currentPage, this.jobTitleFilter)
   }
 
   navigateToMessage(uid: string, juname: string) {

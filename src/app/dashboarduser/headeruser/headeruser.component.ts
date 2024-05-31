@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { backendUrl } from 'src/app/constant';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-headeruser',
@@ -17,7 +18,7 @@ export class HeaderuserComponent implements OnInit {
 
   private backend_URL=`${backendUrl}`;
   
-  constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router, private cookie: CookieService) {
+  constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router, private cookie: CookieService,private snackBar: MatSnackBar) {
     // Initialize properties from local storage
     this.accessToken = localStorage.getItem('accessToken');
     this.uid = localStorage.getItem('uid');
@@ -48,7 +49,11 @@ export class HeaderuserComponent implements OnInit {
     this.cookie.delete('accessToken');
         this.cookie.delete('refreshToken');
         this.cookie.delete('uid');
-          // alert("LogOut Successfull");
+          this.snackBar.open('Logout Successfully.', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
 
           this.router.navigate(['/login']);
         } else {

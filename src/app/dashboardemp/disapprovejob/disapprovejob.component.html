@@ -1,11 +1,12 @@
-<div class="container" *ngIf="data.length > 0; else noJobsContent">
-  <h1 class="text-center mb-4">Job Listings</h1>
-  <!-- <div class="form-group mt-3">
-    <label for="jobTitleFilter">Filter by Job Title:</label>
-    <input type="text" class="form-control" id="jobTitleFilter" [(ngModel)]="jobTitleFilter"
-      (input)="filterByJobTitle()" />
-  </div> -->
-  <div class="container mt-3 mb-3" *ngIf="data.length > 0; else noJobsContent">
+<div class="container" >
+  <div *ngIf="isLoading" class="text-center mt-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <h1 class="text-center mb-4"  *ngIf="!isLoading">Job Listings</h1>
+
+  <div class="container mt-3 mb-3" *ngIf="data.length > 0 && !isLoading; else noJobsContent">
     <div class="row justify-content-center">
       <div class="col-md-6 col-lg-5">
         <div class="input-group">
@@ -15,21 +16,22 @@
       </div>
       <div class="col-md-12 col-lg-2 mt-2 mt-md-0">
         <button type="button" class="btn rounded-pill px-4 py-3 shadow-lg mx-1 findjobbtn"
-        (click)="performSearchAndFetchJobs()">Search Jobs</button>
+          (click)="performSearchAndFetchJobs()">Search Jobs</button>
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="!isLoading">
     <ng-container *ngIf="data.length > 0; else noJobsContent">
       <div class="col">
         <div class="row justify-content-center">
           <div class="col-auto d-flex align-items-center">
-            <button class="btn custom-btn rounded-pill mb-2" (click)="onPageChange(currentPage-1)" [disabled]="currentPage === 1">
+            <button class="btn custom-btn rounded-pill mb-2" (click)="onPageChange(currentPage-1)"
+              [disabled]="currentPage === 1">
               <i class="fa fa-arrow-left"></i>&nbsp;Previous
             </button>
           </div>
           <!-- <div class="col-md-6 col-lg-4" *ngFor="let job of filteredData"> -->
-            <div class="col-md-6 col-lg-4" *ngFor="let job of data">
+          <div class="col-md-6 col-lg-4" *ngFor="let job of data">
             <div class="card mb-4 job-card">
               <div class="card-body">
                 <h2 class="card-title">{{ job.jobtitle }}</h2>
@@ -53,7 +55,8 @@
                   <button class="btn custom-btn rounded-pill apply-button"
                     (click)="fetchAppliedUsers(job.empid, job.jobid)">
                     View Applicants
-                    <span *ngIf="job.applicants > 0" class="badge rounded-pill bg-danger ml-2">{{ job.applicants }}</span>
+                    <span *ngIf="job.applicants > 0" class="badge rounded-pill bg-danger ml-2">{{ job.applicants
+                      }}</span>
                     <!-- <span *ngIf="job.applicants > 0" class="badge badge-pill custom-btn">{{ job.applicants }}</span> -->
                   </button>
                 </div>
@@ -65,7 +68,8 @@
             </div>
           </div>
           <div class="col-auto d-flex align-items-center">
-            <button class="btn custom-btn rounded-pill mt-2" (click)="onPageChange(currentPage+1)" [disabled]="currentPage === totalPages">
+            <button class="btn custom-btn rounded-pill mt-2" (click)="onPageChange(currentPage+1)"
+              [disabled]="currentPage === totalPages">
               Next <i class="fa fa-arrow-right"></i>
             </button>
           </div>
@@ -77,7 +81,8 @@
 
 <ng-template #noJobsContent>
   <div class="container text-center">
-    <img src="https://raw.githubusercontent.com/suraj9594/Feature-Images/main/images/no%20jobs%20posted%20yet-01.png" alt="No Jobs" class="no-jobs-image">
+    <img src="https://raw.githubusercontent.com/suraj9594/Feature-Images/main/images/no%20jobs%20posted%20yet-01.png"
+      alt="No Jobs" class="no-jobs-image">
     <!-- <p class="no-jobs-text">No jobs posted yet.</p> -->
     <h1 class="no-jobs-text">There is no job </h1>
     <div class="d-flex justify-content-center align-items-center">

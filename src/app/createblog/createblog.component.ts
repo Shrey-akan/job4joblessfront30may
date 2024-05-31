@@ -8,6 +8,8 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { uploadImageAWS } from '../aws';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Component({
   selector: 'app-createblog',
   templateUrl: './createblog.component.html',
@@ -23,6 +25,7 @@ export class CreateblogComponent {
   loading: boolean = false;
   isLoading: boolean = false;
   constructor(
+    private snackBar: MatSnackBar,
     private fb: FormBuilder,
     private http: HttpClient,
     private route: ActivatedRoute,
@@ -135,7 +138,11 @@ export class CreateblogComponent {
               console.log('Blog created successfully:', response);
               this.blogForm.reset();
               this.isLoading = false;
-              alert("Blog Created Successfully");
+              this.snackBar.open('Blog Created Successfully', 'Close', {
+                duration: 10000, // Duration in milliseconds
+                horizontalPosition: 'center',
+                verticalPosition: 'top'
+              });
               this.router.navigate([`/postblog/${token}`]);
   
             },
@@ -150,7 +157,11 @@ export class CreateblogComponent {
       } else {
         console.error('Invalid blog data');
         this.isLoading = false;
-        alert("Invalid data");
+        this.snackBar.open('Invalid data', 'Close', {
+          duration: 10000, // Duration in milliseconds
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
       }
     });
   }

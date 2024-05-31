@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/auth/user.service';
 import { backendUrl , OtpUrl} from 'src/app/constant';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-optverify',
   templateUrl: './optverify.component.html',
@@ -19,6 +19,7 @@ export class OptverifyComponent implements OnInit {
   loadingVerifyOTP: boolean = false;
 
   constructor(
+    private snackBar:MatSnackBar,
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
@@ -52,12 +53,19 @@ export class OptverifyComponent implements OnInit {
             if (!payload.otpExpired) {
               this.updateEmployerVerificationStatus(emailValue);
             } else {
-              // console.error("OTP expired");
-              alert("OTP expired. Please resend the OTP.");
+              this.snackBar.open('OTP expired. Please resend the OTP.', 'Close', {
+                duration: 10000, // Duration in milliseconds
+                horizontalPosition: 'center',
+                verticalPosition: 'top'
+              });
             }
           } else {
             // console.error("Incorrect OTP");
-            alert("Incorrect OTP. Please enter the correct OTP.");
+            this.snackBar.open('Incorrect OTP. Please enter the correct OTP.', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
           }
         },
         error: (err) => {
@@ -80,7 +88,11 @@ export class OptverifyComponent implements OnInit {
           // console.log("Employer verified successfully");
           // Navigate to the desired route (e.g., '/employer/empsign')
           this.router.navigate(['/employer/empsign']);
-          alert('Register successful!');
+          this.snackBar.open('Register successful!', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         },
         error: (err) => {
           // console.error(`Error updating employer verification status: ${err}`);

@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { backendUrl,blogconst } from '../constant';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-forgetblogpass',
@@ -26,7 +27,7 @@ export class ForgetblogpassComponent {
   private backend_URL=`${blogconst}`;
 
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private http: HttpClient) {
+  constructor(private snackBar:MatSnackBar, private formBuilder: FormBuilder, private router: Router, private http: HttpClient) {
     this.passwordResetForm = this.formBuilder.group({
       email: ['',[Validators.required , Validators.email , Validators.pattern(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/) ]],
       newPassword: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#/><])[A-Za-z\d@$!%*?&#/><]+$/)]]
@@ -81,7 +82,11 @@ export class ForgetblogpassComponent {
             // console.log(response);
             this.successMessage = 'Password updated successfully';
             this.errorMessage = '';
-            alert('Password updated successfully');
+            this.snackBar.open('Password updated successfully', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
             this.router.navigate(['/']); // Navigate to a different route after successful password reset
           },
           error: (err: any) => {
@@ -91,21 +96,37 @@ export class ForgetblogpassComponent {
             if (err.status === 404) {
               this.errorMessage = 'Email not found';
               this.successMessage = '';
-              alert('Email not found');
+              this.snackBar.open('Email not found', 'Close', {
+                duration: 10000, // Duration in milliseconds
+                horizontalPosition: 'center',
+                verticalPosition: 'top'
+              });
             } else if (err.status === 500) {
               this.errorMessage = 'Internal server error';
               this.successMessage = '';
-              alert('Internal server error');
+              this.snackBar.open('Internal server error', 'Close', {
+                duration: 10000, // Duration in milliseconds
+                horizontalPosition: 'center',
+                verticalPosition: 'top'
+              });
             } else {
               // If there's a custom error message from the server, display it
               if (err.error && err.error.error) {
                 this.errorMessage = 'An error occurred: ' + err.error.error;
                 this.successMessage = '';
-                alert('An error occurred: ' + err.error.error);
+                this.snackBar.open('An error occurred:', 'Close', {
+                  duration: 10000, // Duration in milliseconds
+                  horizontalPosition: 'center',
+                  verticalPosition: 'top'
+                });
               } else {
                 this.errorMessage = 'An unexpected error occurred';
                 this.successMessage = '';
-                alert('An unexpected error occurred');
+                this.snackBar.open('An unexpected error occurred', 'Close', {
+                  duration: 10000, // Duration in milliseconds
+                  horizontalPosition: 'center',
+                  verticalPosition: 'top'
+                });
               }
             }
           }

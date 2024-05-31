@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { backendUrl } from 'src/app/constant';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-resetpasswordemployer',
@@ -20,7 +21,7 @@ export class ResetpasswordemployerComponent implements OnInit {
 
   private backend_URL=`${backendUrl}`;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private http: HttpClient) {}
+  constructor(private snackBar:MatSnackBar, private formBuilder: FormBuilder, private router: Router, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.passwordResetForm = this.formBuilder.group({
@@ -81,7 +82,11 @@ export class ResetpasswordemployerComponent implements OnInit {
           next: (response: any) => {
             this.successMessage = 'Password updated successfully';
             this.errorMessage = '';
-            alert('Password updated successfully');
+            this.snackBar.open('Password updated successfully', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
             this.router.navigate(['/employer/empsign']);
           },
           error: (err: any) => {

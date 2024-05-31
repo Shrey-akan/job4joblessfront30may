@@ -7,7 +7,8 @@
     <div class="row">
         <div class="col-md-12 custom-font">
             <div class="d-flex flex-column justify-content-center align-items-stretch">
-                <div *ngFor="let job of getJobsForCurrentPage()" class="border-2 border rounded-4 p-4 mt-3">
+                <!-- <div *ngFor="let job of getJobsForCurrentPage()" class="border-2 border rounded-4 p-4 mt-3"> -->
+                <div *ngFor="let job of filteredJobs" class="border-2 border rounded-4 p-4 mt-3">
                     <div *ngIf="job.numberofopening > 10">
                         <span class="rounded-4 border-0 px-2 py-1" style="background-color: #86efac; color: #166534;">
                             Urgently Hiring
@@ -15,29 +16,13 @@
                     </div>
                     <div class="d-flex justify-content-between align-items-center mt-3">
                         <p class="fs-3 fw-bold">{{ job.jobtitle }}</p>
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div *ngIf="liked; else notLiked">
-                                <!-- Content to display when liked is true -->
-                                <span class="rounded-circle mx-3 border-0"
-                                    style="background-color: #1e2e5c41; color: white; padding: 10px 15px;">
-                                    <i class="fa-solid fa-bookmark"></i>
-                                </span>
-                            </div>
-                            <ng-template #notLiked>
-                                <!-- Content to display when liked is false -->
-                                <span class="rounded-circle mx-3 border-0"
-                                    style="background-color: #1e2e5c41; padding: 10px 15px;">
-                                    <i class="fa-regular fa-bookmark"></i>
-                                </span>
-                            </ng-template>
-                        </div>
                     </div>
                     <p class="rounded-pill px-2 py-1 mx-2"><i class="fa-solid fa-building"></i>&nbsp;{{
                         job.companyforthisjob }}
                     </p>
                     <div class="d-flex flex-row justify-content-start align-items-center flex-wrap">
                         <p class="rounded-pill px-2 py-1 mx-2 custom-pills">{{ job.numberofopening }} opening(s)</p>
-                        <p class="rounded-pill px-2 py-1 mx-2 custom-pills">{{ job.experience }} Experience</p>
+                        <p class="rounded-pill px-2 py-1 mx-2 custom-pills">{{ job.experience }} Years of Experience</p>
                         <p class="rounded-pill px-2 py-1 mx-2 custom-pills"><i
                                 class="fa-solid fa-location-dot"></i>&nbsp;{{
                             job.locationjob }}</p>
@@ -71,13 +56,17 @@
                             }}</a> to apply</p>
 
                     <p class="rounded-3 px-2 py-1 mx-2">
-                        <i class="fa-solid fa-calendar-days"></i>&nbsp;&nbsp;{{ formatDate(job.sendTime) | date: 'd MMMM
-                        yyyy' }}
+                        <i class="fa-solid fa-calendar-days"></i>&nbsp;&nbsp;{{ job.sendTime | date: 'd MMMM yyyy' }}
                     </p>
 
                     <button class="btn custom-btn mt-3 rounded-pill" routerLink="/login">Apply</button>
                 </div>
+
             </div>
         </div>
+    </div>
+    <div class="my-2 text-center">
+        <button [disabled]="currentPage===1" class="previous-button" (click)="onPageChange(currentPage-1)">&nbsp; < Previous</button>
+        <button [disabled]="currentPage === totalPage" class="load-more-button" (click)="onPageChange(currentPage+1)">Next ></button>
     </div>
 </div>

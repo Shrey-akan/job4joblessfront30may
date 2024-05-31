@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import * as intelInput from "intl-tel-input";
 import { backendUrl, OtpUrl } from '../constant';
 import { error } from 'jquery';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -43,7 +44,7 @@ export class RegisterComponent implements OnInit {
     this.showOtherInputBox = event.target.checked;
   }
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private userservice: UserService, private http: HttpClient) {
+  constructor(private snackBar:MatSnackBar, private formBuilder: FormBuilder, private router: Router, private userservice: UserService, private http: HttpClient) {
   }
   ngOnInit(): void {
     const innputElement = document.getElementById("phone");
@@ -110,7 +111,11 @@ export class RegisterComponent implements OnInit {
           console.log("checking after running api", this.userregister);
           if (payload.userExists) {
             // User already exists with the email
-            alert('User already exists with this email!');
+            this.snackBar.open('User already exists with this email!', 'Close', {
+              duration: 10000, // Duration in milliseconds
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
           } else {
             // User does not exist, generate OTP
             this.successMessage = 'User registered successfully! Please Wait..';
@@ -120,7 +125,11 @@ export class RegisterComponent implements OnInit {
         },
         (err) => {
           console.error('Some error occurred:', err);
-          alert('User already exists with this email!');
+          this.snackBar.open('User already exists with this email!', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
           this.loading = false; // Remove loader if an error occurs
         }
       );
@@ -137,12 +146,20 @@ export class RegisterComponent implements OnInit {
           this.router.navigate(['/checkotp', payload.uid]);
         } else {
           console.error('Otp not generated');
-          alert('Otp not generated');
+          this.snackBar.open('Otp not generated', 'Close', {
+            duration: 10000, // Duration in milliseconds
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         }
       },
       error: (err) => {
         console.error('Some error occurred:', err);
-        alert(err);
+        this.snackBar.open(err, 'Close', {
+          duration: 10000, // Duration in milliseconds
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
       }
       , complete: () => {
         this.loading = false; // Hide loader after OTP generation is completed
@@ -156,7 +173,11 @@ export class RegisterComponent implements OnInit {
     if (empmatch) {
       this.router.navigate(['/seeker/']);
     } else {
-      alert("Invalid Details");
+      this.snackBar.open('Invalid Details', 'Close', {
+        duration: 10000, // Duration in milliseconds
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
     }
   }
   togglePasswordVisibility() {
