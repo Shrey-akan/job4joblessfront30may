@@ -64,23 +64,23 @@ export class UpdateprofileComponent implements OnInit {
     // console.log(this.userID);
     // console.log('User ID from cookie:', this.userID);
 
-    let response = this.b1.fetchuser();
+    // let response = this.b1.fetchuser();
 
-    response.subscribe((data1: any) => {
-      // Debugging: Log the data received from the API
-      // console.log('Data from API:', data1);
-      const uuid = this.userID;
-      // console.log(uuid);
+    // response.subscribe((data1: any) => {
+    //   // Debugging: Log the data received from the API
+    //   // console.log('Data from API:', data1);
+    //   const uuid = this.userID;
+    //   // console.log(uuid);
 
-      // Filter the data array to include only the user with the matching userID
-      // this.data = data1.find((user: any) => user.uid === uuid);
-      this.userData1 = data1.find((user: any) => user.uid == uuid);
-      // console.log(this.userData1);
-      // Debugging: Log the filtered data
-      // console.log('Filtered Data:', this.userData1);
-      this.abc = this.userData1.uid;
-      // console.log(this.abc);
-    });
+    //   // Filter the data array to include only the user with the matching userID
+    //   // this.data = data1.find((user: any) => user.uid === uuid);
+    //   this.userData1 = data1.find((user: any) => user.uid == uuid);
+    //   // console.log(this.userData1);
+    //   // Debugging: Log the filtered data
+    //   // console.log('Filtered Data:', this.userData1);
+    //   this.abc = this.userData1.uid;
+    //   // console.log(this.abc);
+    // });
 
     // Initialize the form with default values or load existing employee data
     this.userform = this.formBuilder.group({

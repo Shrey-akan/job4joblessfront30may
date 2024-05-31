@@ -45,24 +45,24 @@ export class UpdateempprofileComponent implements OnInit {
 
     // console.log(this.empId);
     // console.log('Employer ID from cookie:', this.empId);
-    let response = this.b1.fetchemployer();
+    // let response = this.b1.fetchemployer();
 
-    response.subscribe((data1: any) => {
-      // Debugging: Log the data received from the API
-      // console.log('Data from API:', data1);
-      const eeid = this.empId;
-      // console.log(eeid);
+    // response.subscribe((data1: any) => {
+    //   // Debugging: Log the data received from the API
+    //   // console.log('Data from API:', data1);
+    //   const eeid = this.empId;
+    //   // console.log(eeid);
 
-      // Filter the data array to include only the user with the matching userID
-      // this.data = data1.find((user: any) => user.uid === uuid);
-      this.empDetail = data1.find((emp: any) => emp.empid == eeid);
-      // console.log(this.empDetail);
-      // Debugging: Log the filtered data
-      // console.log("hello");
-      // console.log('Filtered Data:', this.empDetail);
-      this.abc = this.empDetail.empmailid;
-      // console.log(this.abc);
-    });
+    //   // Filter the data array to include only the user with the matching userID
+    //   // this.data = data1.find((user: any) => user.uid === uuid);
+    //   this.empDetail = data1.find((emp: any) => emp.empid == eeid);
+    //   // console.log(this.empDetail);
+    //   // Debugging: Log the filtered data
+    //   // console.log("hello");
+    //   // console.log('Filtered Data:', this.empDetail);
+    //   this.abc = this.empDetail.empmailid;
+    //   // console.log(this.abc);
+    // });
 
 
     // Initialize the form with default values or load existing employee data
